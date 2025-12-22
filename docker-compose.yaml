@@ -3,7 +3,6 @@ services:
     build:
       context: .
       dockerfile: docker/web/Dockerfile
-    container_name: submitty_web
     ports:
       - "8080:80"
 
@@ -11,4 +10,3 @@ services:
     build:
       context: .
       dockerfile: docker/worker/Dockerfile
-    container_name: submitty_worker
