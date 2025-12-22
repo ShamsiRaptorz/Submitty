@@ -1,3 +1,6 @@
+## CI/CD Test
+Change made on 23 Dec for pipeline verification
+
 <p align="center">
   <picture>
     <source media="(prefers-color-scheme: dark)" srcset="https://github.com/Submitty/Submitty/blob/main/site/public/img/submitty_logo_white.png?raw=true">
