@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   web:
     build:
@@ -8,31 +6,9 @@ services:
     container_name: submitty_web
     ports:
       - "8080:80"
-    depends_on:
-      - db
-    environment:
-      DB_HOST: db
-      DB_NAME: submitty
-      DB_USER: submitty
-      DB_PASS: submitty
 
   worker:
     build:
       context: .
       dockerfile: docker/worker/Dockerfile
     container_name: submitty_worker
-    depends_on:
-      - db
-
-  db:
-    image: postgres:14
-    container_name: submitty_db
-    environment:
-      POSTGRES_DB: submitty
-      POSTGRES_USER: submitty
-      POSTGRES_PASSWORD: submitty
-    volumes:
-      - db_data:/var/lib/postgresql/data
-
-volumes:
-  db_data:

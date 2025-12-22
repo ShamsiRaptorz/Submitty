@@ -9,6 +9,12 @@ pipeline {
             }
         }
 
+        stage('Cleanup Old Containers') {
+            steps {
+                bat 'docker compose down || exit 0'
+            }
+        }
+
         stage('Run Containers') {
             steps {
                 bat 'docker compose up -d'
@@ -19,15 +25,6 @@ pipeline {
             steps {
                 bat 'docker ps'
             }
-        }
-    }
-
-    post {
-        success {
-            echo 'Pipeline executed successfully'
-        }
-        failure {
-            echo 'Pipeline failed'
         }
     }
 }
