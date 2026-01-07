@@ -1,11 +1,13 @@
 pipeline {
     agent any
 
-    environment {
-        PROJECT_NAME = "Submitty-CI-CD"
-    }
-
     stages {
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/ShamsiRaptorz/Submitty.git'
+            }
+        }
+
         stage('Build Docker Images') {
             steps {
                 echo 'Building Docker images...'
@@ -13,9 +15,9 @@ pipeline {
             }
         }
 
-        stage('Cleanup Old Containers') {
+        stage('Stop Old Containers') {
             steps {
-                echo 'Stopping old containers...'
+                echo 'Stopping old containers if any...'
                 sh 'docker compose down || true'
             }
         }
@@ -29,18 +31,18 @@ pipeline {
 
         stage('Smoke Test') {
             steps {
-                echo 'Checking running containers...'
+                echo 'Listing running containers...'
                 sh 'docker ps'
             }
         }
     }
 
     post {
-        success {
-            echo 'Pipeline completed successfully!'
-        }
         failure {
             echo 'Pipeline failed!'
+        }
+        success {
+            echo 'Pipeline succeeded!'
         }
     }
 }
