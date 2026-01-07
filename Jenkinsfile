@@ -17,21 +17,21 @@ pipeline {
             steps {
                 echo 'Building Docker images...'
                 // Linux command to run docker-compose
-                sh 'docker compose -f docker-compose.yaml build'
+                sh 'docker-compose -f docker-compose.yaml build'
             }
         }
 
         stage('Stop Old Containers') {
             steps {
                 echo 'Stopping old containers if any...'
-                sh 'docker compose -f docker-compose.yaml down || true'
+                sh 'docker-compose -f docker-compose.yaml down || true'
             }
         }
 
         stage('Run Containers') {
             steps {
                 echo 'Starting containers...'
-                sh 'docker compose -f docker-compose.yaml up -d'
+                sh 'docker-compose -f docker-compose.yaml up -d'
             }
         }
 
