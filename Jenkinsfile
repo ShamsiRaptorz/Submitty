@@ -2,53 +2,54 @@ pipeline {
     agent any
 
     environment {
-        // Optional: define any env variables here
         PROJECT_NAME = "Submitty"
     }
 
     stages {
+
         stage('Checkout Code') {
             steps {
-                echo 'Checking out code...'
-                git url: 'https://github.com/ShamsiRaptorz/Submitty.git', branch: 'main'
+                echo '📥 Checking out code...'
+                git branch: 'main',
+                    url: 'https://github.com/ShamsiRaptorz/Submitty.git'
             }
         }
 
         stage('Build Docker Images') {
             steps {
-                echo 'Building Docker images...'
-                sh 'docker compose -f docker-compose.yaml build'
+                echo '🐳 Building Docker images...'
+                bat 'docker compose build'
             }
         }
 
-        stage('Stop Old Containers') {
+        stage('Stop Existing Containers') {
             steps {
-                echo 'Stopping old containers if any...'
-                sh 'docker compose -f docker-compose.yaml down || true'
+                echo '🛑 Stopping old containers...'
+                bat 'docker compose down || exit 0'
             }
         }
 
-        stage('Run Containers') {
+        stage('Deploy Containers') {
             steps {
-                echo 'Starting containers...'
-                sh 'docker compose -f docker-compose.yaml up -d'
+                echo '🚀 Starting containers...'
+                bat 'docker compose up -d'
             }
         }
 
         stage('Smoke Test') {
             steps {
-                echo 'Listing running containers...'
-                sh 'docker ps'
+                echo '✅ Running containers:'
+                bat 'docker ps'
             }
         }
     }
 
     post {
         success {
-            echo 'Pipeline completed successfully!'
+            echo '🎉 Submitty deployment successful!'
         }
         failure {
-            echo 'Pipeline failed. Check logs for errors.'
+            echo '❌ Pipeline failed. Check Jenkins logs.'
         }
     }
 }
