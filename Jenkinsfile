@@ -1,6 +1,10 @@
 pipeline {
     agent any
 
+    environment {
+        PROJECT_NAME = "Submitty-CI-CD"
+    }
+
     stages {
         stage('Build Docker Images') {
             steps {
@@ -11,7 +15,7 @@ pipeline {
 
         stage('Cleanup Old Containers') {
             steps {
-                echo 'Cleaning up old containers...'
+                echo 'Stopping old containers...'
                 sh 'docker compose down || true'
             }
         }
@@ -25,9 +29,18 @@ pipeline {
 
         stage('Smoke Test') {
             steps {
-                echo 'Running smoke test...'
+                echo 'Checking running containers...'
                 sh 'docker ps'
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
