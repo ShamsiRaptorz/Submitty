@@ -6,13 +6,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout Code') {
-            steps {
-                echo 'Checking out code from GitHub...'
-                git url: 'https://github.com/ShamsiRaptorz/Submitty.git', branch: 'main'
-            }
-        }
-
         stage('Build Docker Images') {
             steps {
                 echo 'Building Docker images...'
