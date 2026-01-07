@@ -18,28 +18,28 @@ pipeline {
         stage('Build Docker Images') {
             steps {
                 echo '🐳 Building Docker images...'
-                bat 'docker compose build'
+                sh 'docker compose build'
             }
         }
 
         stage('Stop Existing Containers') {
             steps {
                 echo '🛑 Stopping old containers...'
-                bat 'docker compose down || exit 0'
+                sh 'docker compose down || true'
             }
         }
 
         stage('Deploy Containers') {
             steps {
                 echo '🚀 Starting containers...'
-                bat 'docker compose up -d'
+                sh 'docker compose up -d'
             }
         }
 
         stage('Smoke Test') {
             steps {
                 echo '✅ Running containers:'
-                bat 'docker ps'
+                sh 'docker ps'
             }
         }
     }
@@ -49,7 +49,7 @@ pipeline {
             echo '🎉 Submitty deployment successful!'
         }
         failure {
-            echo '❌ Pipeline failed. Check Jenkins logs.'
+            echo '❌ Pipeline failed. Check logs.'
         }
     }
 }
