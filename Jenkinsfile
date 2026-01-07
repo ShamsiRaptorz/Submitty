@@ -1,31 +1,37 @@
 pipeline {
     agent any
 
+    environment {
+        // Optional: define any env variables here
+        PROJECT_NAME = "Submitty"
+    }
+
     stages {
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/ShamsiRaptorz/Submitty.git'
+                echo 'Checking out code...'
+                git url: 'https://github.com/ShamsiRaptorz/Submitty.git', branch: 'main'
             }
         }
 
         stage('Build Docker Images') {
             steps {
                 echo 'Building Docker images...'
-                sh 'docker compose build'
+                sh 'docker compose -f docker-compose.yaml build'
             }
         }
 
         stage('Stop Old Containers') {
             steps {
                 echo 'Stopping old containers if any...'
-                sh 'docker compose down || true'
+                sh 'docker compose -f docker-compose.yaml down || true'
             }
         }
 
         stage('Run Containers') {
             steps {
                 echo 'Starting containers...'
-                sh 'docker compose up -d'
+                sh 'docker compose -f docker-compose.yaml up -d'
             }
         }
 
@@ -38,11 +44,11 @@ pipeline {
     }
 
     post {
-        failure {
-            echo 'Pipeline failed!'
-        }
         success {
-            echo 'Pipeline succeeded!'
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed. Check logs for errors.'
         }
     }
 }
