@@ -17,7 +17,11 @@ pipeline {
         stage('Stop Old Containers') {
             steps {
                 echo 'Stopping old containers if any...'
-                sh 'docker-compose -f docker-compose.yaml down || true'
+                sh '''
+                    docker-compose -f docker-compose.yaml down || true
+                    docker stop submitty_web submitty_worker 2>/dev/null || true
+                    docker rm submitty_web submitty_worker 2>/dev/null || true
+                '''
             }
         }
 
